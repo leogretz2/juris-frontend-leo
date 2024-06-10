@@ -12,6 +12,7 @@
   display: flex;
   flex-direction: column;
   width: 600px;
+  max-height: 90vh; /* Ensure the chat container does not exceed 90% of the viewport height */
   background: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
@@ -23,10 +24,27 @@
   padding: 16px;
   overflow-y: auto;
   border-bottom: 1px solid #ddd;
+  max-height: 70vh; /* Set a max-height to make it scrollable */
+}
+
+.current-question {
+  font-size: 20px; /* Reduced size slightly */
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.current-question ul {
+  padding-left: 20px;
+}
+
+.current-question li {
+  margin-bottom: 10px;
 }
 
 .chat-message {
   margin-bottom: 12px;
+  font-size: 16px; /* Set consistent font size */
+  white-space: pre-wrap; /* Preserve white space and wrap */
 }
 
 .chat-message.user {
@@ -41,15 +59,18 @@
   display: flex;
   justify-content: center;
   padding: 16px;
+  background: #f9f9f9;
 }
 
-.chat-input input {
+.chat-input textarea {
   width: 80%;
   padding: 12px;
-  font-size: 16px;
+  font-size: 16px; /* Set consistent font size */
   border: 1px solid #ddd;
   border-radius: 8px;
   margin-right: 8px;
+  resize: none; /* Prevent manual resizing */
+  overflow: hidden; /* Hide scrollbar */
 }
 
 .chat-input button {
