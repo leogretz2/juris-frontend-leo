@@ -2,35 +2,54 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './App.css';
+import { supabase } from './supabaseClient';
+import AuthModal from './authModal';
 
 function App() {
-  const [userUuid, setUserUuid] = useState('4caf6478-592b-4970-a45d-0c530920f341'); // Replace with your actual user UUID
+  const [userUuid, setUserUuid] = useState(null);
   const [sessionId, setSessionId] = useState(null);
   const [message, setMessage] = useState('');
   const [chatHistory, setChatHistory] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState({ text: '', answers: {} }); // State to store the current question
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const messageRef = useRef(null); // Reference to the message input
 
 
   const REPLIT_BASE_URL = 'https://35bbeaf5-a4ce-4712-b55e-61d89ff58bb9-00-cxuw80lt4fu1.spock.replit.dev:3001'; // Replace with your Replit URL
 
   useEffect(() => {
-    // Start a new session when the component mounts
-    const startSession = async () => {
-      try {
-        const response = await axios.post(`${REPLIT_BASE_URL}/api/user/startSession`, { user_uuid: userUuid });
-        setSessionId(response.data.sessionId);
-        setCurrentQuestion({
-          text: response.data.firstQuestion.question_text,
-          answers: response.data.firstQuestion.possible_answers || {},
-        });
-        setChatHistory([]);
-      } catch (error) {
-        console.error('Error starting session:', error);
+    // Check if user is logged in
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      const session = data.session;
+      setUserUuid(session?.user?.id ?? null);
+
+      if (!session) {
+        setShowAuthModal(true);
       }
     };
 
-    startSession();
+    checkSession();
+  }, []);
+
+  useEffect(() => {
+    if (userUuid) {
+      const startSession = async () => {
+        try {
+          const response = await axios.post(`${REPLIT_BASE_URL}/api/user/startSession`, { user_uuid: userUuid });
+          setSessionId(response.data.sessionId);
+          setCurrentQuestion({
+            text: response.data.firstQuestion.question_text,
+            answers: response.data.firstQuestion.possible_answers || {},
+          });
+          setChatHistory([]);
+        } catch (error) {
+          console.error('Error starting session:', error);
+        }
+      };
+
+      startSession();
+    }
   }, [userUuid]);
 
   const sendMessage = async () => {
@@ -72,8 +91,16 @@ function App() {
     e.target.style.height = e.target.scrollHeight + 'px';
   };
 
+  const handleAuthModalClose = () => {
+    setShowAuthModal(false);
+    const session = supabase.auth.session();
+    setUserUuid(session?.user?.id ?? null);
+  };
+
+
   return (
     <div className="App">
+        {showAuthModal && <AuthModal onClose={handleAuthModalClose} />}
       <div className="chat-container">
         <div className="chat-history">
           {currentQuestion.text && (
