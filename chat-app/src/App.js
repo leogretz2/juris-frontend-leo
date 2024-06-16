@@ -16,7 +16,7 @@ function App() {
   const messageRef = useRef(null); // Reference to the message input
 
 
-  const REPLIT_BASE_URL = 'https://35bbeaf5-a4ce-4712-b55e-61d89ff58bb9-00-cxuw80lt4fu1.spock.replit.dev:3001'; // Replace with your Replit URL
+  const REPLIT_BASE_URL = 'https://ai-tutor-backend-kappa.vercel.app/'; // Replace with your Replit URL
 
   useEffect(() => {
     // Check if user is logged in
