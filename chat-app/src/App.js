@@ -4,6 +4,7 @@ import axios from 'axios';
 import './App.css';
 import { supabase } from './supabaseClient';
 import AuthModal from './authModal';
+import { Analytics } from '@vercel/analytics/react';
 
 function App() {
   const [userUuid, setUserUuid] = useState(null);
@@ -133,6 +134,7 @@ function App() {
           <button onClick={sendMessage}>Send</button>
         </div>
       </div>
+      <Analytics />
     </div>
   );
 }
