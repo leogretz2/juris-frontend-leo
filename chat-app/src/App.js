@@ -15,8 +15,9 @@ function App() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const messageRef = useRef(null); // Reference to the message input
 
-
-  const REPLIT_BASE_URL = 'https://ai-tutor-backend-kappa.vercel.app/'; // Replace with your Replit URL
+  // Test: make URL dependent on environment. .env.local loaded for every environment but test, .env.production loaded for production environment only (deployed?)
+  // const REPLIT_BASE_URL = 'https://ai-tutor-backend-kappa.vercel.app/'; // Replace with your Replit URL
+  const REPLIT_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
 
   useEffect(() => {
     // Check if user is logged in
@@ -51,7 +52,7 @@ function App() {
 
       startSession();
     }
-  }, [userUuid]);
+  }, [userUuid, REPLIT_BASE_URL]);
 
   const sendMessage = async () => {
     if (message.trim() === '') return;

@@ -21,3 +21,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+chat-app/.env
+chat-app/.env.local
+chat-app/.env.production
